@@ -8,7 +8,7 @@ First, declare your routes in an enum:
 enum AppRoutes: Routes {
   case orders
   case search(query: String, category: SearchCategory) // You can include Codable types
-  case orderDetails(orderId: Int, OrderRoutes) // and subroutes
+  case orderDetails(orderId: Int, OrderRoutes?) // and subroutes
   
   static let defaultRoute = .orders // Set a default Route
 }
@@ -60,7 +60,7 @@ struct OrdersView: View {
 }
 ```
 
-You can also navigate using a `String`:
+You can also navigate using a `String` (not yet implemented):
 
 ```swift
 struct MyApp: App {
