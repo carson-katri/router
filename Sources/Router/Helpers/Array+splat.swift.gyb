@@ -1,0 +1,23 @@
+%{
+    max_elements = 10
+}%
+extension Array where Element == Any {
+    func splat() -> Any {
+        switch count {
+        % for i in range(1, max_elements + 1):
+        case ${i}:
+            return (
+                % for j in range(0, i - 1):
+                self[${j}],
+                % end
+                self[${i - 1}]
+            ) as Any
+        % end
+        default:
+            fatalError("""
+            Router only supports up to ${max_elements} associated values. \
+            Please file a bug if more are needed.
+            """)
+        }
+    }
+}
