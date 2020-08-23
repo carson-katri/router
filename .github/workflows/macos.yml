@@ -1,0 +1,18 @@
+name: macOS Build & Test
+
+on: [push, pull_request]
+
+env:
+  swift: '/Applications/Xcode_12.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift'
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: ${swift} build -v
+    - name: Run tests
+      run: ${swift} test -v
