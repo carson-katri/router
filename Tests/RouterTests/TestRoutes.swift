@@ -6,6 +6,7 @@ struct User: Equatable, Codable {
 }
 
 enum AppRoutes: Routes {
+    static let defaultRoute: Self = .orders
     case orders
     case orderDetails(Int)
     case admin(AdminRoutes?)
@@ -13,6 +14,7 @@ enum AppRoutes: Routes {
 }
 
 enum AdminRoutes: Routes {
+    static let defaultRoute: Self = .newUser
     case editUser(name: String, id: Int)
     case newUser
 }

@@ -3,7 +3,7 @@ name: macOS Build & Test
 on: [push, pull_request]
 
 env:
-  swift: '/Applications/Xcode_12.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift'
+  xcodebuild: '/Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild test -only-testing:RouterTests/EncoderTests -scheme Router-Package -sdk macosx11.0'
 
 jobs:
   build:
@@ -12,7 +12,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Make xcodeproj
+      run: swift package generate-xcodeproj
     - name: Build
-      run: ${swift} build -v
+      run: ${xcodebuild}
     - name: Run tests
-      run: ${swift} test -v
+      run: ${xcodebuild} test -only-testing:RouterTests/EncoderTests -scheme Router-Package -sdk macosx11.0
