@@ -5,6 +5,7 @@ on: [push, pull_request]
 env:
   xcodebuild: '/Applications/Xcode_12.app/Contents/Developer/usr/bin/xcodebuild'
   swift: '/Applications/Xcode_12.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift'
+  destination: 'platform=iOS Simulator,OS=14.0,name=iPhone 11'
 
 jobs:
   build:
@@ -18,4 +19,4 @@ jobs:
     - name: Build
       run: ${xcodebuild}
     - name: Run tests
-      run: ${xcodebuild} test -only-testing:RouterTests/EncoderTests -scheme Router-Package -sdk macosx11.0
+      run: ${xcodebuild} test -only-testing:RouterTests/EncoderTests -scheme Router-Package -destination "${destination}"
