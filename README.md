@@ -2,6 +2,8 @@
 
 *Typesafe routing for SwiftUI.*
 
+> *Note*: This package is still being designed, so the API may change, and the example below may not match the current API 100%.
+
 First, declare your routes in an enum:
 
 ```swift
