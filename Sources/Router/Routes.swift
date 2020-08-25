@@ -1,5 +1,6 @@
 public protocol AnyRoutes {
     static var defaultAnyRoute: AnyRoutes { get }
+    static var codingStrategy: RouteCodingStrategy { get }
     func encode() throws -> String
 }
 
@@ -17,12 +18,14 @@ public protocol Routes: AnyRoutes, Equatable, Codable {
 
 extension Routes {
     public static var defaultAnyRoute: AnyRoutes { defaultRoute }
+    public static var codingStrategy: RouteCodingStrategy { CamelCaseRouteCodingStrategy() }
     
     /// Convert the case to a `String` using `RouteEncoder`.
     public func encode() throws -> String {
         let reflection = Mirror(reflecting: self)
         if let route = reflection.children.first,
-           let routeName = route.label { // Associated Values
+           let routeCaseName = route.label { // Associated Values
+            let routeName = Self.codingStrategy.convert(routeCaseName)
             let associatedValues = Mirror(reflecting: route.value).children
             if associatedValues.count > 0 {
                 let codableVals = associatedValues.map({ $0.value as! Encodable })
@@ -36,7 +39,7 @@ extension Routes {
                 }
             }
         } else { // Plain
-            return "\(self)"
+            return Self.codingStrategy.convert("\(self)")
         }
     }
     

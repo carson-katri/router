@@ -22,6 +22,25 @@ final class EncoderTests: XCTestCase {
     func testEncodeNestedRoute() {
         XCTAssert(AppRoutes.admin(.editUser(name: "JohnDoe", id: 0)) == "admin/editUser/JohnDoe/0")
     }
+    
+    func testEncodeCodable() {
+        XCTAssert(AppRoutes.profile(for: .init(id: 0, name: "JohnDoe")) == "profile/0/JohnDoe")
+    }
+    
+    func testRouteCodingStrategy() {
+        let input = "thisIsATest"
+        let output = ["this", "is", "a", "test"]
+        let strategies: [(RouteCodingStrategy, String)] = [
+            (CamelCaseRouteCodingStrategy(), "thisIsATest"),
+            (KebabCaseRouteCodingStrategy(), "this-is-a-test"),
+            (PascalCaseRouteCodingStrategy(), "ThisIsATest"),
+            (SnakeCaseRouteCodingStrategy(), "this_is_a_test")
+        ]
+        for (strategy, expectation) in strategies {
+            XCTAssert(strategy.convert(input) == expectation)
+            XCTAssert(strategy.decode(expectation).map { $0.lowercased() } == output)
+        }
+    }
 
     static var allTests = [
         ("testEncodePlain", testEncodePlain),
@@ -29,5 +48,7 @@ final class EncoderTests: XCTestCase {
         ("testEncodeNil", testEncodeNil),
         ("testEncodeMultipleComponents", testEncodeMultipleComponents),
         ("testEncodeNestedRoute", testEncodeNestedRoute),
+        ("testEncodeCodable", testEncodeCodable),
+        ("testRouteCodingStrategy", testRouteCodingStrategy)
     ]
 }
