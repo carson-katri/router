@@ -29,7 +29,6 @@ final class EncoderTests: XCTestCase {
     
     func testRouteCodingStrategy() {
         let input = "thisIsATest"
-        let output = ["this", "is", "a", "test"]
         let strategies: [(RouteCodingStrategy, String)] = [
             (CamelCaseRouteCodingStrategy(), "thisIsATest"),
             (KebabCaseRouteCodingStrategy(), "this-is-a-test"),
@@ -38,7 +37,6 @@ final class EncoderTests: XCTestCase {
         ]
         for (strategy, expectation) in strategies {
             XCTAssert(strategy.convert(input) == expectation)
-            XCTAssert(strategy.decode(expectation).map { $0.lowercased() } == output)
         }
     }
 
