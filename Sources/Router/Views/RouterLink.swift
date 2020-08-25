@@ -1,23 +1,15 @@
 import SwiftUI
 
 public struct RouterLink<R, Label>: View where R: Routes, Label: View {
+    @Environment(\.routerLinkStyle) var style
     @EnvironmentObject var context: RouterContext
     let targetRoute: R
     let label: Label
     
-    #if os(macOS)
-    let buttonStyle = LinkButtonStyle()
-    #elseif os(iOS)
-    let buttonStyle = DefaultButtonStyle()
-    #endif
-    
     public var body: some View {
-        Button {
+        style.makeBody(label: label, isActive: context.isActive(targetRoute)) {
             context.activateRoute(targetRoute)
-        } label: {
-            label
         }
-            .buttonStyle(buttonStyle)
     }
     
     public init(to targetRoute: R,

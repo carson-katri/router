@@ -1,10 +1,9 @@
 import Router
 
 enum AppRoutes: Routes {
-    static let defaultRoute: Self = .orders
+    static let defaultRoute: Self = .orders(orderId: nil)
     
-    case orders
-    case orderDetails(orderId: Int, OrderRoutes?)
+    case orders(orderId: Int?, OrderRoutes? = nil)
 }
 
 enum OrderRoutes: Routes {

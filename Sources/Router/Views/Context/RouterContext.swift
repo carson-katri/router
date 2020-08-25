@@ -34,6 +34,19 @@ public final class RouterContext: ObservableObject {
         } set: { _ in }
     }
     
+    func isActive<R>(_ route: R) -> Binding<Bool> where R: Routes {
+        Binding.init { [weak self] in
+            if let r = self?.activeRoute?.case as? R {
+                return r == route
+            }
+            return false
+        } set: { [weak self] active in
+            if active {
+                self?.activateRoute(route)
+            }
+        }
+    }
+    
     public func activateRoute<R: Routes>(_ selectedRoute: R) {
         if contextType != R.self {
             // Route is not valid in the current context.

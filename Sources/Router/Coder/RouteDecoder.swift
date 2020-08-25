@@ -17,7 +17,7 @@ final class RouteDecoder<R: Routes>: Decoder {
     
     func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key>
     where Key : CodingKey {
-        return .init(RouteKeyedDecodingContainer(decoder: self))
+        .init(RouteKeyedDecodingContainer(decoder: self))
     }
     
     func unkeyedContainer() throws -> UnkeyedDecodingContainer {
@@ -81,6 +81,7 @@ struct RouteKeyedDecodingContainer<Key: CodingKey, R: Routes>: KeyedDecodingCont
            let val = initializer(String(str)) {
             if decoder.routeString.count > 0 {
                 decoder.routeString.removeFirst()
+                decoder.types.removeFirst()
             } else {
                 throw RouteDecodingError.layoutMismatch
             }
@@ -101,20 +102,7 @@ struct RouteKeyedDecodingContainer<Key: CodingKey, R: Routes>: KeyedDecodingCont
     }
     
     func decodeNil(forKey key: Key) throws -> Bool {
-        if decoder.routeString.first != nil,
-           let type = decoder.types.first {
-            if let optionalInfo = try? typeInfo(of: type),
-               let innerType = optionalInfo.genericTypes.first,
-               innerType is AnyRoutes.Type {  // This is a SubRoute
-                if !(decoder.context?.routers.contains(where: { $0.routesType == innerType }) ?? false) {
-                    // We don't have a `Router` to handle this...
-                    // Its possible the `Router` is nested in a `Route` that isn't being
-                    // rendered yet. Try passing `nil`, then deal with it after the next render.
-                    decoder.context?.needsSubRouteEvaluation = true
-                    return true
-                }
-            }
-        }
+        // TODO: Handle sub-Route inside a `Codable` type.
         return decoder.routeString.first == nil
     }
     

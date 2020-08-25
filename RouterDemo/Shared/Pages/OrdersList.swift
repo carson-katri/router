@@ -3,14 +3,13 @@ import Router
 
 struct OrdersList: View {
     var body: some View {
-        NavigationView {
-            List(Order.sampleData) { order in
-                RouterLink(to: AppRoutes.orderDetails(orderId: order.id, .toppings)) {
-                    PizzaListItem(pizza: order.pizza)
-                        .padding(.vertical)
-                }
+        List(Order.sampleData) { order in
+            RouterLink(to: AppRoutes.orders(orderId: order.id, .toppings)) {
+                PizzaListItem(pizza: order.pizza)
+                    .padding(.vertical)
             }
         }
+        .routerLinkStyle(NavigationLinkRouterLinkStyle())
     }
 }
 

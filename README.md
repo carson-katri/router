@@ -12,14 +12,14 @@ enum AppRoutes: Routes {
   case search(query: String, category: SearchCategory) // You can include Codable types
   case orderDetails(orderId: Int, OrderRoutes?) // and subroutes
   
-  static let defaultRoute = .orders // Set a default Route
+  static let defaultRoute: Self = .orders // Set a default Route
 }
 
 enum OrderRoutes: Routes {
   case overview
   case bill
   
-  static let defaultRoute = .overview
+  static let defaultRoute: Self = .overview
 }
 
 enum SearchCategory: Int, Codable {
@@ -36,10 +36,12 @@ struct ContentView: View {
       Route(AppRoutes.orders) { OrdersView() }
       Route(AppRoutes.search) { route in
         if case let .search(query, category) = route { SearchView(query, category) }
-      } // Omit any associated values from the Route definition, and access them from the closure.
+      }
+      // Omit any associated values from the Route definition, and access them from the closure.
       Route(AppRoutes.orderDetails) { route in
-        if case let .orderDetails(orderId, _) = route { 
-          Router(OrderRoutes.self) { // Declare sub-Routers for deeper navigation.
+        if case let .orderDetails(orderId, _) = route {
+          // Declare sub-Routers for deeper navigation.
+          Router(OrderRoutes.self) {
             Route(OrderRoutes.overview) { OrderOverview(orderId) }
             Route(OrderRoutes.bill) { OrderBill(orderId) }
           }
